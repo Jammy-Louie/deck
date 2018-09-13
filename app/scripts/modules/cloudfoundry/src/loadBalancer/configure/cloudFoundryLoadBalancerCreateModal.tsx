@@ -102,18 +102,11 @@ export class CloudFoundryLoadBalancerCreateModal extends React.Component<
   }
 
   private submit = (values: ICloudFoundryLoadBalancerUpsertCommand): void => {
-    // const { app, forPipelineConfig, onComplete } = this.props;
     const { app } = this.props;
     const { isNew } = this.state;
 
     const descriptor = isNew ? 'Create' : 'Update';
     const loadBalancerCommandFormatted = cloneDeep(values);
-    // if (forPipelineConfig) {
-    //   // don't submit to backend for creation. Just return the loadBalancerCommand object
-    //   this.formatListeners(loadBalancerCommandFormatted).then(() => {
-    //     onComplete && onComplete(loadBalancerCommandFormatted);
-    //   });
-    // } else {
     const taskMonitor = new TaskMonitor({
       application: app,
       title: `${isNew ? 'Creating' : 'Updating'} your load balancer`,
@@ -122,14 +115,10 @@ export class CloudFoundryLoadBalancerCreateModal extends React.Component<
     });
 
     taskMonitor.submit(() => {
-      // return this.formatListeners(loadBalancerCommandFormatted).then(() => {
-      //   this.formatCommand(loadBalancerCommandFormatted);
       return LoadBalancerWriter.upsertLoadBalancer(loadBalancerCommandFormatted, app, descriptor);
-      // });
     });
 
     this.setState({ taskMonitor });
-    // }
   };
 
   private validate = (): FormikErrors<ICloudFoundryLoadBalancerUpsertCommand> => {

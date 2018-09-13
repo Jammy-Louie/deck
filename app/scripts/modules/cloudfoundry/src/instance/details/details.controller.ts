@@ -1,5 +1,4 @@
 import { IController, IPromise, IQService, module } from 'angular';
-
 import { StateService } from '@uirouter/angularjs';
 import { cloneDeep, flattenDeep } from 'lodash';
 

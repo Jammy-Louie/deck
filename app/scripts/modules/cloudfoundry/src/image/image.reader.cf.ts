@@ -8,17 +8,13 @@ export class CloudFoundryImageReader {
   public static findImages(account: string): IPromise<ICloudFoundryCluster[]> {
     return API.one('images/find')
       .withParams({
-        account: account,
+        account,
         provider: 'cloudfoundry',
       })
       .get()
-      .then(
-        function(results: any) {
-          return results;
-        },
-        function(): any[] {
-          return [];
-        },
-      );
+      .then(function(results: any) {
+        return results;
+      })
+      .catch((): any[] => []);
   }
 }

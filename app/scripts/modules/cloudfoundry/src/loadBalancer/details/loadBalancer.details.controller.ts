@@ -65,10 +65,6 @@ class CloudFoundryLoadBalancerDetailsController implements IController {
     });
   }
 
-  public canDeleteLoadBalancer(): boolean {
-    return this.loadBalancer ? this.loadBalancer.name !== 'default' : false;
-  }
-
   private extractLoadBalancer(): void {
     this.loadBalancer = this.app.getDataSource('loadBalancers').data.find((test: ILoadBalancer) => {
       return test.name === this.loadBalancerFromParams.name && test.account === this.loadBalancerFromParams.accountId;

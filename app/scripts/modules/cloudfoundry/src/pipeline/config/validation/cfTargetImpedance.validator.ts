@@ -23,31 +23,27 @@ export class CfTargetImpedanceValidator implements IStageOrTriggerValidator {
     _config: IStageOrTriggerTypeConfig,
   ): string {
     const stagesToTest: IStage[] = PipelineConfigService.getAllUpstreamDependencies(pipeline, stage),
-      regions: string[] = stage['regions'] || [];
+      regions: string[] = stage.regions || [];
     let allRegionsFound = true;
 
     regions.forEach(region => {
       let regionFound = false;
       stagesToTest.forEach(toTest => {
-        if (toTest.type === 'deploy' && toTest['clusters'] && toTest['clusters'].length) {
-          toTest['clusters'].forEach((cluster: any) => {
+        if (toTest.type === 'deploy' && toTest.clusters && toTest.clusters.length) {
+          toTest.clusters.forEach((cluster: any) => {
             const clusterName: string = NameUtils.getClusterName(
               cluster.application,
               cluster.stack,
               cluster.freeFormDetails,
             );
-            if (
-              clusterName === stage['cluster'] &&
-              cluster.account === stage['credentials'] &&
-              cluster.region === region
-            ) {
+            if (clusterName === stage.cluster && cluster.account === stage.credentials && cluster.region === region) {
               regionFound = true;
             }
           });
         } else if (
           toTest.type === 'cloneServerGroup' &&
-          toTest['targetCluster'] === stage['cluster'] &&
-          toTest['region'] === region
+          toTest.targetCluster === stage.cluster &&
+          toTest.region === region
         ) {
           regionFound = true;
         }
